@@ -151,9 +151,16 @@ def get_reconstructed_spectrograms(directory, target_size=(2754, 256), batch_siz
 def load_spectrogram(file, target_shape=(2754, 129)):
     # Carregar a imagem completa
     img = Image.open(file)
-    
+
     # Converte para escala de cinza
     img_reconstructed_gray = img.convert('L')
+
+    # Obter as dimensões da imagem
+    width, height = img_reconstructed_gray.size
+
+    # Recortar para pegar apenas o espectrograma reconstruído (metade direita)
+    left_crop = width // 2
+    img_reconstructed_gray = img_reconstructed_gray.crop((left_crop, 0, width, height))
 
     # Converte para array e normaliza
     img_array = img_to_array(img_reconstructed_gray)
@@ -164,8 +171,9 @@ def load_spectrogram(file, target_shape=(2754, 129)):
 
     # Adiciona a dimensão de canais (1 canal para grayscale)
     img_array = np.expand_dims(img_array, axis=-1)
-    
+
     return img_array
+
 
 def pad_batch_to_size(batch, batch_size):
     # Verificar se o tamanho do batch é menor que o batch_size
