@@ -148,7 +148,7 @@ def get_reconstructed_spectrograms(directory, target_size=(2754, 256), batch_siz
     return dataset, file_ids, steps_per_epoch
 '''
 
-def load_spectrogram(file, target_size=(200, 200)):
+def load_spectrogram(file, target_shape=(2754, 129)):
     # Carregar a imagem completa
     img = Image.open(file)
     
@@ -159,8 +159,8 @@ def load_spectrogram(file, target_size=(200, 200)):
     img_array = img_to_array(img_reconstructed_gray)
     img_array /= 255.0
 
-    # Redimensiona para o target_size
-    img_array = np.resize(img_array, target_size)
+    # Redimensiona para o target_shape
+    img_array = np.resize(img_array, target_shape)
 
     # Adiciona a dimensão de canais (1 canal para grayscale)
     img_array = np.expand_dims(img_array, axis=-1)
@@ -185,7 +185,7 @@ def pad_batch_to_size(batch, batch_size):
     return batch
 
 # Modificação no generator
-def data_generator(files, batch_size, target_shape=(200, 200)):
+def data_generator(files, batch_size, target_shape=(2754, 129)):
     for i in range(0, len(files), batch_size):
         batch_files = files[i:i + batch_size]
         batch_spectrograms = []
@@ -196,7 +196,7 @@ def data_generator(files, batch_size, target_shape=(200, 200)):
         yield np.array(batch_spectrograms)  # Saída será (batch_size, height, width, 1)
 
 # Modificação no dataset
-def get_reconstructed_spectrograms(directory, target_size=(200, 200), batch_size=64):
+def get_reconstructed_spectrograms(directory, target_size=(2754, 129), batch_size=64):
     # Verifica se target_size é uma tupla
     if isinstance(target_size, int):
         target_size = (target_size, target_size)  # Converte para tupla (altura, largura)
@@ -214,6 +214,7 @@ def get_reconstructed_spectrograms(directory, target_size=(200, 200), batch_size
     file_ids = [os.path.basename(file) for file in reconstructed_files]
 
     return dataset, file_ids, steps_per_epoch
+
 
 reconstruct_base_dir = 'D:/POS/auto_dasr/dataset/reconstruct'
 spectrogram_dir = os.path.join(reconstruct_base_dir, 'spectrograms')
@@ -254,9 +255,13 @@ class SpeechFeatureEmbedding(layers.Layer):
         )
 
     def call(self, x):
+        # Remover a dimensão do canal
+        x = tf.squeeze(x, axis=-1)  # Agora x terá o shape (batch_size, 2754, 129)
+        
         x = self.conv1(x)
         x = self.conv2(x)
         return self.conv3(x)
+
 
 
 # Define o Transformer Encoder
