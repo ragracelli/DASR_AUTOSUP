@@ -16,9 +16,7 @@ Forma da entrada no encoder: (None, 64, 40000)
 Forma da saída do encoder: (None, 8, 200)
 2024-09-20 07:58:10.558919: I tensorflow/stream_executor/cuda/cuda_blas.cc:1774] TensorFloat-32 will be used for the matrix multiplication. This will only be logged once.
 2024-09-20 07:58:10.569285: I tensorflow/stream_executor/cuda/cuda_dnn.cc:366] Loaded cuDNN version 8905
-2024-09-20 07:58:10.954077: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 3.37GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
-2024-09-20 07:58:10.954320: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 3.37GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
- 1/83 [..............................] - ETA: 1:10:43 - loss: 0.02532024-09-20 07:58:24.199493: W tensorflow/core/framework/op_kernel.cc:1733] INVALID_ARGUMENT: TypeError: `generator` yielded an element of shape (43, 200, 200, 1) where an element of shape (64, 200, 200, 1) was expected.
+ 1/200 [..............................] - ETA: 1:10:43 - loss: 0.02532024-09-20 07:58:24.199493: W tensorflow/core/framework/op_kernel.cc:1733] INVALID_ARGUMENT: TypeError: `generator` yielded an element of shape (43, 200, 200, 1) where an element of shape (64, 200, 200, 1) was expected.
 Traceback (most recent call last):
 
   File "C:\Users\Ricardo\miniconda3\envs\speechvision\lib\site-packages\tensorflow\python\ops\script_ops.py", line 275, in __call__
